@@ -1,6 +1,21 @@
 [package]
 name = "crab-shell"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+authors = ["Aoi Takahashi <xxx@example.com>"]
+description = "A modern shell implementation written in Rust"
+license = "MIT"
+repository = "https://github.com/Aoi-Takahashi/crab-shell"
+homepage = "https://github.com/Aoi-Takahashi/crab-shell"
+documentation = "https://docs.rs/crab-shell"
+readme = "README.md"
+keywords = ["shell", "cli", "terminal", "rust"]
+categories = ["command-line-utilities"]
 
 [dependencies]
+
+[dev-dependencies]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
