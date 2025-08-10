@@ -1,0 +1,12 @@
+{
+    "rust-analyzer.rustfmt.overrideCommand": ["rustfmt", "--edition", "2021"],
+    
+    "[rust]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true
+}
