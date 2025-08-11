@@ -1,5 +1,8 @@
 use crate::models::CredentialEntry;
-use crate::storage::{database_exists, load_database, save_database};
+use crate::storage::{
+    backup_database, database_exists, delete_database, get_database_info, load_database,
+    save_database,
+};
 use anyhow::{Context, Result};
 use clap::{Parser, Subcommand};
 use dialoguer::{Confirm, Input, Password};
@@ -33,6 +36,7 @@ pub enum Commands {
     },
     Info,
     Backup,
+    Delete,
 }
 
 impl Commands {
@@ -43,8 +47,9 @@ impl Commands {
             Commands::List => list_credentials(),
             Commands::Edit { service } => edit_credential(&service),
             Commands::Remove { service } => remove_credential(&service),
-            Commands::Info => show_database_info(),
+            Commands::Info => show_credential(),
             Commands::Backup => backup_database(),
+            Commands::Delete => delete_credential(),
         }
     }
 }
@@ -223,7 +228,7 @@ fn remove_credential(service: &str) -> Result<()> {
     Ok(())
 }
 
-fn show_database_info() -> Result<()> {
+fn show_credential() -> Result<()> {
     if !database_exists() {
         println!("📭 No database file exists yet.");
         return Ok(());
@@ -235,7 +240,7 @@ fn show_database_info() -> Result<()> {
     println!("  Version: {}", database.version);
     println!("  Entries: {}", database.len());
 
-    match crate::storage::file::get_database_info() {
+    match get_database_info() {
         Ok(metadata) => {
             println!("  File size: {} bytes", metadata.len());
             if let Ok(modified) = metadata.modified() {
@@ -253,8 +258,38 @@ fn show_database_info() -> Result<()> {
 
     Ok(())
 }
+fn delete_credential() -> Result<()> {
+    if !database_exists() {
+        println!("📭 No database file exists to delete.");
+        return Ok(());
+    }
 
-fn backup_database() -> Result<()> {
-    crate::storage::file::backup_database().context("Failed to create backup")?;
+    let database = load_database().context("Failed to load database")?;
+    println!("⚠️  You are about to delete the entire database!");
+    println!("📊 Current database contains {} entries", database.len());
+
+    let confirm = Confirm::new()
+        .with_prompt("Are you sure you want to delete the ENTIRE database? This cannot be undone!")
+        .interact()
+        .context("Failed to get confirmation")?;
+
+    if confirm {
+        let create_backup = Confirm::new()
+            .with_prompt("Create a backup before deletion?")
+            .default(true)
+            .interact()
+            .context("Failed to get backup confirmation")?;
+
+        if create_backup {
+            crate::storage::file::backup_database().context("Failed to create backup")?;
+        }
+
+        delete_database().context("Failed to delete database")?;
+
+        println!("🗑️  Database deleted successfully!");
+    } else {
+        println!("Operation cancelled.");
+    }
+
     Ok(())
 }
