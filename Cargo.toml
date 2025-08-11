@@ -13,6 +13,9 @@ keywords = ["shell", "cli", "terminal", "rust"]
 categories = ["command-line-utilities"]
 
 [dependencies]
+anyhow = "1.0.98"
+clap = "4.5.43"
+dialoguer = "0.11.0"
 dirs = "6.0.0"
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.142"
