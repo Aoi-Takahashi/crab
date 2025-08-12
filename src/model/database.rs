@@ -1,4 +1,4 @@
-use crate::models::CredentialEntry;
+use crate::model::CredentialEntry;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]

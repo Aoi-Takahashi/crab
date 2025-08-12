@@ -1,4 +1,4 @@
-use serde::{Deserialize,Serialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CredentialEntry {
@@ -9,9 +9,9 @@ pub struct CredentialEntry {
     pub updated_at: u64,
 }
 
-impl CredentialEntry{
+impl CredentialEntry {
     pub fn new(service: String, account: String, secret: String) -> Self {
-       let now = std::time::SystemTime::now()
+        let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()
             .as_secs();
@@ -47,6 +47,4 @@ impl CredentialEntry{
             .unwrap()
             .as_secs();
     }
-
-    
 }
