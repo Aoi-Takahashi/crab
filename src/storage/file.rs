@@ -78,9 +78,9 @@ pub fn backup_database() -> CredentialResult<()> {
     let timestamp = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_err(|e| {
-            CredentialError::IoError(std::io::Error::other(
-                format!("Failed to get system time: {e}"),
-            ))
+            CredentialError::IoError(std::io::Error::other(format!(
+                "Failed to get system time: {e}"
+            )))
         })?
         .as_secs();
 

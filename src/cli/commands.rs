@@ -74,7 +74,8 @@ fn add_credential(service: Option<String>, account: Option<String>) -> Credentia
             .map_err(|_| CredentialError::user_cancelled())?;
 
         if !overwrite {
-            return Err(CredentialError::user_cancelled());
+            println!("Operation cancelled.");
+            return Ok(());
         }
         database.remove_entry(&service_name);
     }
@@ -129,7 +130,7 @@ fn list_credentials() -> CredentialResult<()> {
     } else {
         println!("📋 Stored Credentials ({} entries):", services.len());
         for (i, service) in services.iter().enumerate() {
-            println!("  {}. {}", i + 1, service);
+            println!("  {}. {service}", i + 1);
         }
     }
     Ok(())
@@ -199,11 +200,10 @@ fn remove_credential(service: &str) -> CredentialResult<()> {
         .interact()
         .map_err(|_| CredentialError::user_cancelled())?;
 
-    if confirm
-        && database.remove_entry(service) {
-            save_database(&database)?;
-            println!("✅ Credential for '{service}' removed successfully!");
-        }
+    if confirm && database.remove_entry(service) {
+        save_database(&database)?;
+        println!("✅ Credential for '{service}' removed successfully!");
+    }
     Ok(())
 }
 
@@ -225,7 +225,9 @@ fn show_credential() -> CredentialResult<()> {
                 println!("  Last modified: {modified:?}");
             }
         }
-        Err(e) => return Err(e),
+        Err(e) => {
+            println!("  Failed to get file info: {e}");
+        }
     }
 
     if let Ok(path) = crate::storage::file::get_database_path() {
