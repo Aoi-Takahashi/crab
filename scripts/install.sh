@@ -4,7 +4,7 @@
 set -euo pipefail
 
 # Configuration
-REPO="Aoi-Takahashi/crab-shell"
+REPO="Aoi-Takahashi/crab"
 BINARY_NAME="crab"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
 
