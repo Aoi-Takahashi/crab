@@ -67,7 +67,7 @@ fn add_credential(service: Option<String>, account: Option<String>) -> Credentia
     };
 
     if database.find_entry(&service_name).is_some() {
-        println!("⚠️ Service '{}' already exists!", service_name);
+        println!("⚠️ Service '{service_name}' already exists!");
         let overwrite = Confirm::new()
             .with_prompt("Do you want to overwrite it?")
             .interact()
@@ -98,7 +98,7 @@ fn add_credential(service: Option<String>, account: Option<String>) -> Credentia
 
     save_database(&database)?;
 
-    println!("✅ Credential for '{}' added successfully!", service_name);
+    println!("✅ Credential for '{service_name}' added successfully!");
     Ok(())
 }
 
@@ -140,7 +140,7 @@ fn edit_credential(service: &str) -> CredentialResult<()> {
 
     match database.edit_entry(service) {
         Some(entry) => {
-            println!("📝 Editing Credential for '{}'", service);
+            println!("📝 Editing Credential for '{service}'");
             println!("Current values:");
             println!("  Service: {}", entry.service);
             println!("  Account: {}", entry.account);
@@ -195,16 +195,15 @@ fn remove_credential(service: &str) -> CredentialResult<()> {
     }
 
     let confirm = Confirm::new()
-        .with_prompt(&format!("Are you sure you want to remove '{}'?", service))
+        .with_prompt(format!("Are you sure you want to remove '{service}'?"))
         .interact()
         .map_err(|_| CredentialError::user_cancelled())?;
 
-    if confirm {
-        if database.remove_entry(service) {
+    if confirm
+        && database.remove_entry(service) {
             save_database(&database)?;
-            println!("✅ Credential for '{}' removed successfully!", service);
+            println!("✅ Credential for '{service}' removed successfully!");
         }
-    }
     Ok(())
 }
 
@@ -223,7 +222,7 @@ fn show_credential() -> CredentialResult<()> {
         Ok(metadata) => {
             println!("  File size: {} bytes", metadata.len());
             if let Ok(modified) = metadata.modified() {
-                println!("  Last modified: {:?}", modified);
+                println!("  Last modified: {modified:?}");
             }
         }
         Err(e) => return Err(e),

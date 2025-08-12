@@ -6,7 +6,7 @@ pub fn format_timestamp_local(timestamp: u64) -> String {
             let local_datetime: DateTime<Local> = utc_datetime.with_timezone(&Local);
             local_datetime.format("%Y-%m-%d %H:%M:%S").to_string()
         }
-        None => format!("Invalid timestamp: {}", timestamp),
+        None => format!("Invalid timestamp: {timestamp}"),
     }
 }
 

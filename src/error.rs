@@ -23,13 +23,13 @@ impl fmt::Display for CredentialError {
                 write!(f, "No Credentials Stored yet.")
             }
             CredentialError::CredentialNotFound(service) => {
-                write!(f, "No credential found for '{}'", service)
+                write!(f, "No credential found for '{service}'")
             }
             CredentialError::IoError(err) => {
-                write!(f, "File operation failed: {}", err)
+                write!(f, "File operation failed: {err}")
             }
             CredentialError::SerializationError(err) => {
-                write!(f, "Data serialization failed: {}", err)
+                write!(f, "Data serialization failed: {err}")
             }
             CredentialError::UserCancelled => {
                 write!(f, "Operation cancelled by user")

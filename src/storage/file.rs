@@ -78,14 +78,13 @@ pub fn backup_database() -> CredentialResult<()> {
     let timestamp = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_err(|e| {
-            CredentialError::IoError(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                format!("Failed to get system time: {}", e),
+            CredentialError::IoError(std::io::Error::other(
+                format!("Failed to get system time: {e}"),
             ))
         })?
         .as_secs();
 
-    let backup_filename = format!("credentials_{}.json.bak", timestamp);
+    let backup_filename = format!("credentials_{timestamp}.json.bak");
     let backup_path = path.with_file_name(backup_filename);
 
     fs::copy(&path, &backup_path)?;

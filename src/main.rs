@@ -17,18 +17,17 @@ fn main() {
                 println!("ℹ️  Operation cancelled.");
             }
             CredentialError::DatabaseNotFound => {
-                eprintln!("❌  {}", e);
+                eprintln!("❌  {e}");
                 eprintln!("💡 Try running 'crab add' to create your first credential.");
             }
             CredentialError::CredentialNotFound(service) => {
-                eprintln!("❌ {}", e);
+                eprintln!("❌ {e}");
                 eprintln!(
-                    "💡 Try 'crab list' to see available services or 'crab add {}' to create it.",
-                    service
+                    "💡 Try 'crab list' to see available services or 'crab add {service}' to create it."
                 );
             }
             _ => {
-                eprintln!("❌ Error: {}", e);
+                eprintln!("❌ Error: {e}");
             }
         }
 
