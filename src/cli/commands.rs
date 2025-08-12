@@ -11,7 +11,6 @@ use dialoguer::{Confirm, Input, Password};
 #[derive(Parser)]
 #[command(name = "crab")]
 #[command(about = "A secure credential manager for storing sensitive information")]
-#[command(version = "0.1.0")]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
