@@ -10,7 +10,10 @@ use dialoguer::{Confirm, Input, Password};
 
 #[derive(Parser)]
 #[command(name = "crab")]
-#[command(about = "A secure credential manager for storing sensitive information")]
+#[command(
+    about = "A secure credential manager for storing sensitive information",
+    version
+)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
