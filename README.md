@@ -113,8 +113,7 @@ crab <COMMAND>
 
 Crab stores its data in:
 
-- **Linux/macOS**: `~/.crab/credentials.json`
-- **Windows**: `%USERPROFILE%\.crab\credentials.json`
+- **Linux/macOS/Windows(WSL)**: `~/.crab/credentials.json`
 
 The database file is automatically created with secure permissions (600 on Unix-like systems).
 
