@@ -3,13 +3,13 @@ name = "crab"
 version = "0.1.4"
 edition = "2021"
 authors = ["Aoi Takahashi <xxx@example.com>"]
-description = "A modern shell implementation written in Rust"
+description = "A secure credential manager written in Rust"
 license = "MIT"
-repository = "https://github.com/Aoi-Takahashi/crab-shell"
-homepage = "https://github.com/Aoi-Takahashi/crab-shell"
-documentation = "https://docs.rs/crab-shell"
+repository = "https://github.com/Aoi-Takahashi/crab"
+homepage = "https://github.com/Aoi-Takahashi/crab"
+documentation = "https://docs.rs/crab"
 readme = "README.md"
-keywords = ["shell", "cli", "terminal", "rust"]
+keywords = ["cli", "terminal", "rust"]
 categories = ["command-line-utilities"]
 
 [dependencies]

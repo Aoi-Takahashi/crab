@@ -1,6 +1,6 @@
 # 🦀 Crab - Secure Credential Manager
 
-A modern, secure credential manager written in Rust for storing and managing sensitive information like passwords, API keys, and other credentials.
+A secure credential manager written in Rust for storing and managing sensitive information like passwords, API keys, and other credentials.
 
 [![CI](https://github.com/Aoi-Takahashi/crab/workflows/CI/badge.svg)](https://github.com/Aoi-Takahashi/crab/actions)
 [![Release](https://img.shields.io/github/v/release/Aoi-Takahashi/crab)](https://github.com/Aoi-Takahashi/crab/releases)
@@ -9,7 +9,7 @@ A modern, secure credential manager written in Rust for storing and managing sen
 ## ✨ Features
 
 - **Secure Storage**: Store credentials safely with local file-based storage
-- **Cross-Platform**: Works on Linux, macOS, and Windows
+- **Cross-Platform**: Works on Linux, macOS, and Windows(WSL)
 - **Interactive CLI**: User-friendly command-line interface with confirmation prompts
 - **Local Time Display**: Shows creation and modification times in your local timezone
 - **Backup & Restore**: Built-in database backup functionality
@@ -19,22 +19,16 @@ A modern, secure credential manager written in Rust for storing and managing sen
 
 ### Quick Install (Recommended)
 
-#### Unix/Linux/macOS
+#### Unix/Linux/macOS/Windows(WSL)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Aoi-Takahashi/crab/main/scripts/install.sh | bash
 ```
 
-#### Windows (PowerShell)
-
-```powershell
-iwr -useb https://raw.githubusercontent.com/Aoi-Takahashi/crab/main/scripts/install.ps1 | iex
-```
-
 #### From Source (Requires Rust)
 
 ```bash
-git clone https://github.com/Aoi-Takahashi/crabl.git
+git clone https://github.com/Aoi-Takahashi/crab.git
 cd crab
 cargo install --path .
 ```
@@ -199,19 +193,6 @@ This project follows standard Rust conventions:
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Built with [Rust](https://www.rust-lang.org/) 🦀
-- CLI powered by [clap](https://github.com/clap-rs/clap)
-- Interactive prompts by [dialoguer](https://github.com/console-rs/dialoguer)
-- Time handling by [chrono](https://github.com/chronotope/chrono)
-
-## 📞 Support
-
-- **Documentation**: Check the [docs](docs/) directory
-- **Issues**: [GitHub Issues](https://github.com/Aoi-Takahashi/crab/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Aoi-Takahashi/crab/discussions)
 
 ---
 
