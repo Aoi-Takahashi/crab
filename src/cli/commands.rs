@@ -125,14 +125,14 @@ fn get_credential(service: &str) -> CredentialResult<()> {
 fn list_credentials() -> CredentialResult<()> {
     let database = load_database()?;
 
-    let services = database.list_services();
+    let entries = database.list_entries();
 
-    if services.is_empty() {
+    if entries.is_empty() {
         Err(CredentialError::credentials_not_stored())?
     } else {
-        println!("📋 Stored Credentials ({} entries):", services.len());
-        for (i, service) in services.iter().enumerate() {
-            println!("  {}. {service}", i + 1);
+        println!("📋 Stored Credentials ({} entries):", entries.len());
+        for (i, entry) in entries.iter().enumerate() {
+            println!("  {}. {}", i + 1, entry.service);
         }
     }
     Ok(())

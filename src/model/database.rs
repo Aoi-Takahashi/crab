@@ -33,11 +33,8 @@ impl CredentialDatabase {
             .find(|entry| entry.service == service)
     }
 
-    pub fn list_services(&self) -> Vec<&str> {
-        self.entries
-            .iter()
-            .map(|entry| entry.service.as_str())
-            .collect()
+    pub fn list_entries(&self) -> Vec<&CredentialEntry> {
+        self.entries.iter().map(|entry| entry).collect()
     }
 
     // NOTE: For Debug
@@ -115,8 +112,8 @@ mod tests {
         database.add_entry(sample_entry("service-a"));
         database.add_entry(sample_entry("service-b"));
 
-        let mut services = database.list_services();
-        services.sort();
+        let entries = database.list_entries();
+        let services: Vec<&str> = entries.iter().map(|entry| entry.service.as_str()).collect();
 
         assert_eq!(services, vec!["service-a", "service-b"]);
     }
