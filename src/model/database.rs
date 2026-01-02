@@ -15,11 +15,11 @@ impl CredentialDatabase {
         }
     }
 
-    pub fn add_entry(&mut self, entry: CredentialEntry) -> () {
+    pub fn add_entry(&mut self, entry: CredentialEntry) {
         self.entries.push(entry);
     }
 
-    pub fn remove_entry(&mut self, service: &str) -> () {
+    pub fn remove_entry(&mut self, service: &str) {
         self.entries.retain(|entry| entry.service != service);
     }
 
@@ -34,7 +34,7 @@ impl CredentialDatabase {
     }
 
     pub fn list_entries(&self) -> Vec<&CredentialEntry> {
-        self.entries.iter().map(|entry| entry).collect()
+        self.entries.iter().collect()
     }
 
     // NOTE: For Debug
