@@ -9,8 +9,8 @@ use clap::{Parser, Subcommand};
 use dialoguer::{Confirm, Input, Password};
 
 #[derive(Parser)]
-#[command(name = "crab")]
 #[command(
+    name = "crab",
     about = "A secure credential manager for storing sensitive information",
     version
 )]
@@ -125,14 +125,14 @@ fn get_credential(service: &str) -> CredentialResult<()> {
 fn list_credentials() -> CredentialResult<()> {
     let database = load_database()?;
 
-    let services = database.list_services();
+    let entries = database.list_entries();
 
-    if services.is_empty() {
+    if entries.is_empty() {
         Err(CredentialError::credentials_not_stored())?
     } else {
-        println!("📋 Stored Credentials ({} entries):", services.len());
-        for (i, service) in services.iter().enumerate() {
-            println!("  {}. {service}", i + 1);
+        println!("📋 Stored Credentials ({} entries):", entries.len());
+        for (i, entry) in entries.iter().enumerate() {
+            println!("  {}. {}", i + 1, entry.service);
         }
     }
     Ok(())
@@ -191,7 +191,7 @@ fn edit_credential(service: &str) -> CredentialResult<()> {
 }
 
 fn remove_credential(service: &str) -> CredentialResult<()> {
-    let mut database = load_database()?;
+    let database = load_database()?;
 
     if database.find_entry(service).is_none() {
         return Err(CredentialError::credential_not_found(service));
@@ -202,7 +202,7 @@ fn remove_credential(service: &str) -> CredentialResult<()> {
         .interact()
         .map_err(|_| CredentialError::user_cancelled())?;
 
-    if confirm && database.remove_entry(service) {
+    if confirm {
         save_database(&database)?;
         println!("✅ Credential for '{service}' removed successfully!");
     }

@@ -92,3 +92,122 @@ pub fn backup_database() -> CredentialResult<()> {
     println!("✅ Database backup created: {}", backup_path.display());
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::path::Path;
+    use std::sync::{Mutex, OnceLock};
+
+    fn home_env_lock() -> std::sync::MutexGuard<'static, ()> {
+        static LOCK: OnceLock<Mutex<()>> = OnceLock::new();
+        LOCK.get_or_init(|| Mutex::new(()))
+            .lock()
+            .expect("lock poisoned")
+    }
+
+    struct HomeGuard {
+        original_home: Option<String>,
+        original_userprofile: Option<String>,
+    }
+
+    impl HomeGuard {
+        fn new(temp_home: &Path) -> Self {
+            let original_home = std::env::var("HOME").ok();
+            let original_userprofile = std::env::var("USERPROFILE").ok();
+            std::env::set_var("HOME", temp_home);
+            std::env::set_var("USERPROFILE", temp_home);
+            Self {
+                original_home,
+                original_userprofile,
+            }
+        }
+    }
+
+    impl Drop for HomeGuard {
+        fn drop(&mut self) {
+            match &self.original_home {
+                Some(value) => std::env::set_var("HOME", value),
+                None => std::env::remove_var("HOME"),
+            }
+            match &self.original_userprofile {
+                Some(value) => std::env::set_var("USERPROFILE", value),
+                None => std::env::remove_var("USERPROFILE"),
+            }
+        }
+    }
+
+    fn sample_database() -> CredentialDatabase {
+        let mut database = CredentialDatabase::new();
+        let entry = crate::model::CredentialEntry::new(
+            "service".to_string(),
+            "account".to_string(),
+            "secret".to_string(),
+        );
+        database.add_entry(entry);
+        database
+    }
+
+    #[test]
+    fn save_and_load_database_round_trip() {
+        let _lock = home_env_lock();
+        let temp_dir = tempfile::tempdir().expect("tempdir");
+        let _guard = HomeGuard::new(temp_dir.path());
+        let database = sample_database();
+
+        save_database(&database).expect("save should succeed");
+        let loaded = load_database().expect("load should succeed");
+
+        assert_eq!(loaded.len(), 1);
+        let entry = loaded.find_entry("service").expect("entry should exist");
+        assert_eq!(entry.account, "account");
+    }
+
+    #[test]
+    fn database_exists_and_delete_behave_as_expected() {
+        let _lock = home_env_lock();
+        let temp_dir = tempfile::tempdir().expect("tempdir");
+        let _guard = HomeGuard::new(temp_dir.path());
+
+        assert!(!database_exists());
+
+        let database = sample_database();
+        save_database(&database).expect("save should succeed");
+        assert!(database_exists());
+
+        delete_database().expect("delete should succeed");
+        assert!(!database_exists());
+    }
+
+    #[test]
+    fn backup_database_creates_bak_file() {
+        let _lock = home_env_lock();
+        let temp_dir = tempfile::tempdir().expect("tempdir");
+        let _guard = HomeGuard::new(temp_dir.path());
+
+        let database = sample_database();
+        save_database(&database).expect("save should succeed");
+        backup_database().expect("backup should succeed");
+
+        let database_path = get_database_path().expect("path should exist");
+        let parent = database_path.parent().expect("parent dir");
+        let backup_count = std::fs::read_dir(parent)
+            .expect("read dir")
+            .filter_map(Result::ok)
+            .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "bak"))
+            .count();
+
+        assert_eq!(backup_count, 1);
+    }
+
+    #[test]
+    fn backup_database_errors_when_missing() {
+        let _lock = home_env_lock();
+        let temp_dir = tempfile::tempdir().expect("tempdir");
+        let _guard = HomeGuard::new(temp_dir.path());
+
+        let result = backup_database();
+
+        assert!(matches!(result, Err(CredentialError::DatabaseNotFound)));
+    }
+}
