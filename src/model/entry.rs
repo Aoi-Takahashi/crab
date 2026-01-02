@@ -48,3 +48,37 @@ impl CredentialEntry {
             .as_secs();
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn new_sets_initial_timestamps() {
+        let entry = CredentialEntry::new(
+            "service".to_string(),
+            "account".to_string(),
+            "secret".to_string(),
+        );
+
+        assert_eq!(entry.service, "service");
+        assert_eq!(entry.account, "account");
+        assert_eq!(entry.secret, "secret");
+    }
+
+    #[test]
+    fn update_methods_change_values() {
+        let mut entry = CredentialEntry::new(
+            "service".to_string(),
+            "account".to_string(),
+            "secret".to_string(),
+        );
+        entry.update_service("service2".to_string());
+        entry.update_account("account2".to_string());
+        entry.update_secret("secret2".to_string());
+
+        assert_eq!(entry.service, "service2");
+        assert_eq!(entry.account, "account2");
+        assert_eq!(entry.secret, "secret2");
+    }
+}

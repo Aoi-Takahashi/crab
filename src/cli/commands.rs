@@ -191,7 +191,7 @@ fn edit_credential(service: &str) -> CredentialResult<()> {
 }
 
 fn remove_credential(service: &str) -> CredentialResult<()> {
-    let mut database = load_database()?;
+    let database = load_database()?;
 
     if database.find_entry(service).is_none() {
         return Err(CredentialError::credential_not_found(service));
@@ -202,7 +202,7 @@ fn remove_credential(service: &str) -> CredentialResult<()> {
         .interact()
         .map_err(|_| CredentialError::user_cancelled())?;
 
-    if confirm && database.remove_entry(service) {
+    if confirm {
         save_database(&database)?;
         println!("✅ Credential for '{service}' removed successfully!");
     }
