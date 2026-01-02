@@ -9,8 +9,8 @@ use clap::{Parser, Subcommand};
 use dialoguer::{Confirm, Input, Password};
 
 #[derive(Parser)]
-#[command(name = "crab")]
 #[command(
+    name = "crab",
     about = "A secure credential manager for storing sensitive information",
     version
 )]
