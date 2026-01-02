@@ -54,7 +54,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn new_sets_initial_timestamps() {
+    fn new_initializes_fields() {
         let entry = CredentialEntry::new(
             "service".to_string(),
             "account".to_string(),
@@ -67,7 +67,7 @@ mod tests {
     }
 
     #[test]
-    fn update_methods_change_values() {
+    fn update_methods_replace_field_values() {
         let mut entry = CredentialEntry::new(
             "service".to_string(),
             "account".to_string(),
